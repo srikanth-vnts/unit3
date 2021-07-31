@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title></title>
+</head>
+<style>
+    #bodyElem{
+        display:flex;
+        flex-direction: column;
+
+    }
+    #navbar {
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 5%;
+     } 
+     #main{
+         display:grid;
+         grid-template-columns: repeat(4,20%);
+         justify-content:center;
+         gap:5%;
+     }
+     #start{
+         display:flex;
+         flex-direction:row;
+         margin-top: 5px;
+         margin-left: 20px;
+     }
+     #start div{
+         margin-right: 20px;
+         font-size: 24px !important;
+         cursor: pointer;
+
+     }
+     #start img{
+         margin-top: -13px;
+     }
+     #center{
+         display:flex;
+         flex-direction:row;
+         margin-top: 5px;
+     }
+     #center button{
+         height:31px;
+         width:60px;
+         border:1px solid rgb(194, 194, 194);
+         cursor: pointer;
+     }
+     .material-icons{
+         font-size:20px !important;
+         color:rgb(92, 92, 92) !important
+     }
+     #center input{
+         height:27px;
+         width:350px;
+         border:1px solid rgb(194, 194, 194);
+     }
+     #end span{
+         font-size: 26px!important;
+         color:rgb(94, 94, 94);
+         margin-left:20px;
+         cursor: pointer;
+     }
+     #end{
+         margin-right:20px;
+         margin-top: 5px;
+     }
+
+     
+
+</style>
+
+<body id='bodyElem'>
+    <div id="navbar">
+       <div id="start">
+           <div class="material-icons">menu</div>
+           <img src='https://cdn.mos.cms.futurecdn.net/8gzcr6RpGStvZFA2qRt4v6-1200-80.jpg' style='height:50px;width:100px;'>
+
+       </div>
+       <div id="center">
+        <input type="text" id="name">
+        <button onclick="youtube()" class="material-icons">search</button>
+        <span class="material-icons" style='font-size:24px !important;margin-left: 10px;margin-top: 3px;'>mic</span>
+
+       </div>
+       <div id="end">
+        <span class="material-icons">video_call</span>
+        <span class="material-icons">apps</span>
+        <span class="material-icons">notifications</span>
+        <span class="material-icons">account_circle</span>
+       </div>
+    </div>
+    <div id = 'main'></div>
+
+</body>
+
+</html>
+
+<script>
+    var main = document.getElementById('main')
+    async function youtube() {
+            main.innerHTML = null;
+            let n = document.getElementById('name').value;
+            var you = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${n}&key=AIzaSyDaZmlmssp1Uj6fOqjom7v-nGtoDGOTeSY&maxResults=20`);
+            var result = await you.json();
+            console.log(result);
+
+            let {items} = result;
+
+            items.forEach(({id:{videoId}})=>{
+                video_div = document.createElement('div');
+                video_div.innerHTML = `<iframe width="100%" height="150" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+                main.append(video_div)
+                console.log(videoId);
+            })
+
+
+
+
+        }
+
+</script>
+
+
