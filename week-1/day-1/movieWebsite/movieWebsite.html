@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,500;1,500&display=swap" rel="stylesheet">
+    <title></title>
+</head>
+<style>
+    #container {
+        display:flex;
+        width:100%;
+        background-color:black;
+        justify-content:center;
+        flex-direction:column;
+   
+    }
+    #navbar{
+        display:flex;
+        width:100%;
+        justify-content:center;
+        flex-direction: row;
+    }
+    #main{
+        display:flex;
+        color:white;
+        justify-content:center;
+        
+
+    }
+    #movie{
+        font-family: 'Roboto', sans-serif;
+        border:1px solid white;
+    }
+
+</style>
+
+<body id="container">
+    
+        <div id='navbar'>
+            <input id='name' type='text'>
+            <button id='search' type='text' onclick = getMovie()>Search</button>
+        </div>
+        <div id='main'></div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    var main = document.getElementById('main');
+
+        async function getMovie() {
+
+            let input = document.getElementById('name').value;
+            let movie_div = document.createElement('div');
+            movie_div.setAttribute('id', 'movie');
+            
+            main.innerHTML = null;
+
+            let movies = await fetch(`http://www.omdbapi.com/?t=${input}&apikey=17bc78e6`);
+            let result = await movies.json();
+            let rec = document.createElement('p');
+            rec.innerHTML = 'Recomended';
+            if(result.imdbRating >= 8.5){
+                movie_div.append(rec);
+            }
+            let poster = document.createElement('img');
+            poster.src = result.Poster;
+            movie_div.append(poster);
+            rating = document.createElement('h5');
+            rating.innerHTML = `Rating : ${result.imdbRating}`;
+            movie_div.append(rating);
+            let title = document.createElement('h3');
+            title.innerHTML = `Title : ${result.Title}`;
+            movie_div.append(title);
+            let date = document.createElement('p');
+            date.innerHTML = `Release Date : ${result.Released}`;
+            movie_div.append(date);
+
+            
+            main.append(movie_div);
+
+            console.log(result);
+            console.log(result.Poster);
+        }
+</script>
