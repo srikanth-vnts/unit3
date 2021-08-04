@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,300;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title></title>
+</head>
+<style>
+    #bodyElem {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    #navbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    #main{
+        display: flex;
+        flex-direction: column;
+    }
+    #main_div{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+            margin-top: 20px;
+    }
+    #results{
+        width:50%;
+        display:flex;
+        flex-direction: column;
+    }
+    
+
+    #start {
+        display: flex;
+        flex-direction: row;
+        margin-top: 5px;
+        margin-left: 20px;
+    }
+
+    #start div {
+        margin-right: 20px;
+        font-size: 24px !important;
+        cursor: pointer;
+
+    }
+
+    #start img {
+        margin-top: 14px;
+        height: 35px;
+    }
+
+    #center {
+        display: flex;
+        flex-direction: row;
+        margin-top: 5px;
+    }
+
+    #center button {
+        height: 31px;
+        width: 60px;
+        border: none;
+        cursor: pointer;
+        color:rgb(46, 139, 245) !important;
+        font-size: 28px !important;
+        background-color:white;
+        margin-left: -85px;
+        margin-top: 23px;
+    }
+
+    .material-icons {
+        font-size: 20px !important;
+        color: rgb(92, 92, 92) !important;
+        cursor: pointer;
+    }
+
+    #center input {
+        height: 45px;
+        width: 550px;
+        border: 1px solid rgb(194, 194, 194);
+        border-radius:50px;
+        margin-top:14px;
+        padding-left:20px;
+        font-size:20px;
+        font-family: 'Roboto', sans-serif;
+        text-decoration: none;
+        color: #5e5e5e;
+    }
+
+    a{ 
+        cursor: pointer;
+    }
+
+    #end span {
+        font-size: 26px !important;
+        color: rgb(94, 94, 94);
+        margin-left: 20px;
+        cursor: pointer;
+    }
+
+    #end {
+        margin-right: 25px;
+        margin-top: 19px;
+    }
+    input{
+        outline: none !important;
+    }
+    .time_taken{
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        color: #939393;
+        margin: 0%;
+        margin-left:29% !important;
+        margin-top: 5px !important;
+    }
+    p{    
+        font-family: 'Roboto', sans-serif;
+        letter-spacing:1px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    .desc{
+        font-size: 13px;
+        margin-bottom: 18px;
+        margin-top: 1px;
+        line-height: 19px;
+        font-weight: 400;
+        }
+    .disp{
+            font-size: 14px;
+            font-weight: 500;
+            color: #5a5a5a;
+         }
+    #knowledge{
+        width:25%;   
+        display:flex;
+        flex-direction: column;
+        box-shadow:0px 0px 4px 0 rgb(0 0 0 / 14%), 0 0px 20px 0 rgb(0 0 0 / 2%);
+        height:fit-content;
+    }
+    #knowledge img{
+        width:100%;
+        height:230px;
+    }
+    .k_div{
+        border-bottom: 1px solid rgb(161, 161, 161);
+        margin-left: 10px;
+    }
+    .k_type{
+            font-size: 14px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-weight: 500;
+    }
+    .k_description{
+        margin:10px;
+        font-size: 13px;
+        line-height: 1.4;
+
+    }
+    .k_title{
+        font-family: 'Roboto', sans-serif;
+        font-size:28px;
+    }
+    .loading{
+        width:180px;
+        margin-top:175px;
+        margin-left: 45%;
+    }
+    
+</style>
+
+<body id='bodyElem'>
+    <div id="navbar">
+        <div id="start">
+            <img src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png'
+                style='height:35px;width:100px;'>
+
+        </div>
+        <div id="center">
+            <input type="text" id="query" >
+            <button class="material-icons" onclick="showResults()">search</button>
+            <span class="material-icons" style='font-size:24px !important;margin-left: -12px;margin-top: 27px;'>mic</span>
+
+        </div>
+        <div id="end">
+            <span class="material-icons">light_mode</span>
+            <span class="material-icons">settings</span>
+            <span class="material-icons">apps</span>
+            <span class="material-icons">account_circle</span>
+        </div>
+    </div>
+    <div id='main'></div>
+
+</body>
+
+</html>
+
+<script>
+    var main = document.getElementById('main');
+
+    async function getResults(){
+        let q = document.getElementById("query").value;
+        let res = await fetch(`http://api.serpstack.com/search?access_key=59c4d25ba095fde8cd2249e7d0244739&query=${q}`);
+        let search_res = await res.json();
+
+        return search_res;
+    }
+
+    async function showResults(){
+      main.innerHTML = null;
+      let loading = document.createElement('img');
+      loading.setAttribute('class', 'loading');
+      loading.src = 'https://i.pinimg.com/originals/75/9c/22/759c22458ddb79bddc794bee5c18bb9f.gif'
+      main.append(loading);
+      let search_res = await getResults();
+      
+      let search_info = (search_res.search_information);
+      loading.style.display = 'none'
+      let time_taken = search_info.time_taken_displayed;
+      let total_res = search_info.total_results;
+      let no_time = document.createElement('div');
+      no_time.setAttribute('class','time_taken');
+      no_time.innerHTML = `<p>About ${total_res} results (${time_taken} seconds)</p>`
+      main.append(no_time);
+      let organic_results = search_res.organic_results;
+      let wiki = search_res.knowledge_graph;
+      console.log('wiki:', wiki)
+      let main_div = document.createElement('div');
+      main_div.setAttribute('id','main_div')
+     // console.log('organic_results:', organic_results)
+      let results = document.createElement('div');
+      results.setAttribute('id','results');
+      main_div.append(results);
+      let knowledgeGraph = document.createElement('div');
+      knowledgeGraph.setAttribute('id', 'knowledge')
+      main_div.append(knowledgeGraph);
+      main.append(main_div);
+
+      organic_results.forEach(({ displayed_url, title})=>{
+          let result_div = document.createElement('div');
+          result_div.setAttribute('class','result_div')
+          let p = document.createElement('p');
+          p.setAttribute('class','disp')
+          p.textContent = displayed_url;
+          result_div.append(p)
+          let name = document.createElement('a');
+          name.innerHTML = `<p style="color:#1a0dab;font-size:20px;">${title}</p>`
+          result_div.append(name);
+          let desc = document.createElement('p');
+          desc.setAttribute('class','desc')
+          desc.textContent = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
+                           labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+                           nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit 
+                           esse cillum dolore eu fugiat nulla pariatur.`
+          result_div.append(desc)
+          results.append(result_div);
+
+      })
+
+      let k_img = document.createElement('img');
+      k_img.src = wiki.image_urls[0];
+      knowledgeGraph.append(k_img);
+      let k_div = document.createElement('div');
+      k_div.setAttribute('class','k_div')
+      let k_title = document.createElement('a');
+      k_title.setAttribute('class','k_title')
+      k_title.textContent = wiki.title;
+      k_div.append(k_title);
+      let k_type = document.createElement('p');
+      k_type.setAttribute('class','k_type')
+      k_type.textContent = wiki.type;
+      k_div.append(k_type);
+      knowledgeGraph.append(k_div);
+      let k_description = document.createElement('p');
+      k_description.setAttribute('class','k_description')
+      k_description.textContent = wiki.description;
+      knowledgeGraph.append(k_description);
+
+    
+
+      
+
+
+    }
+       
+    
+    
+
+</script>
+

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+<style>
+    #container {
+        width: 100%;
+        height: 550px;
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        align-items: center;
+
+    }
+
+    #signup {
+        display: flex;
+        width: 25%;
+        z-index: 1000;
+        visibility: visible;
+        border: 1px solid rgb(150, 150, 150);
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #signup input {
+
+        height: 30px;
+
+    }
+
+    #login {
+        display: flex;
+        width: 20%;
+        z-index: 1000;
+        margin-left: -302px;
+        visibility: hidden;
+        border: 1px solid rgb(150, 150, 150);
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #login input {
+        width: 90%;
+        height: 30px;
+
+    }
+
+    #myForm,
+    #myForm1 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #myLogin {
+        display: flex;
+        flex-direction: column;
+    }
+    button{
+        float: right;
+    }
+</style>
+
+<body>
+    <button type='submit' id='already' class='submit' onclick='alreadyRegistered()'>Already a member</button>
+    <div id='container'>
+        
+        <div id=signup>
+            <h3>Register</h3>
+            <form id="myForm">
+                Name:<input type="text" id='name' class='signup'>
+                Email:<input type='text' id='email' class='signup'>
+                Username:<input type='text' id='username' class='signup'>
+                Mobile:<input type='number' id='mobile' class='mobile' class='signup'>
+                Password:<input type='password' id='password' class=' signup'>
+                Description:<input type='text' id='description' class='signup'>
+                <input type='submit' id='submit' class='submit' onclick='Register(event)'>
+                
+            </form>
+        </div>
+        <div id="login">
+            <h3>Login</h3>
+
+            <form id="myForm1">
+                Name:<input type="text" id='inp1' class='login'>
+                Password:<input type='password' id='inp2' class=' login'>
+                
+
+            </form>
+            <button type='submit' id='loginSub' class='submit' onclick='logins()'>Login</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    var signUp = document.getElementById('signup');
+    var Login = document.getElementById('login');
+    function Register(e) {
+        e.preventDefault();
+
+        let formdata = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            mobile: document.getElementById('mobile').value,
+            username: document.getElementById('username').value,
+            description: document.getElementById('description').value
+
+        };
+        formdata = JSON.stringify(formdata);
+
+        fetch('https://masai-api-mocker.herokuapp.com/auth/register', {
+            method: 'POST',
+
+            body: formdata,
+
+            headers: {
+                "Content-Type": "application/json",
+            },
+
+
+        })
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (res) {
+                console.log(res);
+                signUp.style.visibility = 'hidden';
+                login.style.visibility = 'visible';
+
+
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+    }
+    function alreadyRegistered(){
+        signUp.style.visibility = 'hidden';
+        login.style.visibility = 'visible';
+
+    }
+    function logins() {
+        
+        let formdata = {
+
+            password: document.getElementById('inp2').value,
+            username: document.getElementById('inp1').value
+
+
+        };
+        let body = JSON.stringify(formdata);
+
+        fetch('https://masai-api-mocker.herokuapp.com/auth/login', {
+            method: 'POST',
+
+            body: body,
+
+
+            headers: {
+                "Content-Type": "application/json",
+            },
+
+
+        })
+
+            .then(function (res) {
+                
+                return res.json();
+            })
+            .then(function (res) {
+                console.log(res);
+                let u = formdata.username;
+                let t = res.token;
+                getMyProfile(u, t);
+                
+
+                
+            })
+            .catch(function (err) {
+                console.log(err);
+                
+            })
+
+            
+    }
+
+    function getMyProfile(user, token) {
+
+        fetch(`https://masai-api-mocker.herokuapp.com/user/${user}`, {
+            type: 'nocors',
+            headers: {
+                Authorization: `Bearer ${token}`
+
+            },
+        })
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (res) {
+                console.log(res);
+                google();
+                
+            })
+            .catch(function (err) {
+                console.log(err);
+                alert('please use correct credentials to go to the home page')
+            })
+
+
+    }
+
+    function google(){
+        window.location.href = 'google.html';
+    }
+
+</script>
