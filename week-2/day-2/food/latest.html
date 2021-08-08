@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="./css/navbar.css">
+    <title></title>
+</head>
+<style>
+
+</style>
+
+<body>
+
+</body>
+
+</html>
+
+<script type='module'>
+import myNavbar from './components/navbar.js'
+document.body.innerHTML = myNavbar();
+
+    let search = document.getElementById('search_btn');
+    search.addEventListener('click', function () {
+            let q = document.getElementById('search').value;//getting the input value
+              window.location.href = 'home.html';
+               
+            get(q);
+        })
+        let main = document.getElementById('main');
+          main.innerHTML = null;
+
+let categories = ['Chicken','Dessert','Pork','Beef','Lamb','Pasta','Seafood','Vegan','Vegetarian'];
+
+import {getRecepie,showRecepie} from './components/content.js';
+for(let i = 0; i < 4;i++){
+  let response = getRecepie(`https://www.themealdb.com/api/json/v1/1/random.php`); //using the url to get the value from api
+
+    response.then(data => { //since we dont have an async function we are using .then to get the data from getRecepie function and passing it to showRecepie along with the main div
+    
+
+        let main = document.getElementById('main');
+       
+        showRecepie(data, main)
+    
+
+    })
+  }
+
+
+
+</script>
+

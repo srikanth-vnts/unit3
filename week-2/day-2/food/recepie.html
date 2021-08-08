@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="./css/navbar.css">
+    <title></title>
+</head>
+<style>
+
+</style>
+
+<body>
+
+</body>
+
+</html>
+
+<script type='module'>
+    import myNavbar from './components/navbar.js'
+  
+    document.body.innerHTML = myNavbar();
+    var recepie = document.getElementById('recepie')
+    recepie.addEventListener('click',()=>{
+        showRecepie();
+    })
+
+   import { getRecepie, showRecepie } from './components/content.js';
+
+    let response = getRecepie(`https://www.themealdb.com/api/json/v1/1/random.php`); //using the url to get the value from api
+
+    response.then(data => { //since we dont have an async function we are using .then to get the data from getRecepie function and passing it to showRecepie along with the main div
+
+
+        let main = document.getElementById('main');
+        main.innerHTML = null;
+
+        showRecepie(data, main)
+
+
+    })
+</script>
